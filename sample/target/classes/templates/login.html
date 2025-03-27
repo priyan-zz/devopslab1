@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('background.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container, .form-container {
+            background: linear-gradient(135deg, rgba(155, 76, 247, 0.6), rgba(48, 113, 233, 0.6));
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        input, select, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        .next-btn, .pay-btn {
+            background: purple;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .ticket-count {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .ticket-count button {
+            width: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Step 1: User Details Form -->
+    <div class="form-container" id="step1">
+        <h2>🚍 BUSEASE</h2>
+        <label>ORIGIN:</label>
+        <input type="text" id="origin" placeholder="Enter origin" required>
+
+        <label>DESTINATION:</label>
+        <input type="text" id="destination" placeholder="Enter destination" required>
+
+        <label>PHONE NUMBER:</label>
+        <input type="text" id="phone" placeholder="Enter phone number" required>
+
+        <button class="next-btn" onclick="nextStep()">NEXT</button>
+    </div>
+
+    <!-- Step 2: Ticket Booking -->
+    <div class="container" id="step2" style="display: none;">
+        <h2>Busease</h2>
+        <p><strong>From:</strong> <span id="originText"></span></p>
+        <p><strong>To:</strong> <span id="destinationText"></span></p>
+        <p><strong>Phone:</strong> <span id="phoneText"></span></p>
+
+        <label for="route">Select Route:</label>
+        <select id="route">
+            <option value="" disabled selected>--Route--</option>
+            <option value="25">27B</option>
+            <option value="15">102</option>
+            <option value="20">7G</option>
+        </select>
+
+        <label>Number of Ticket(s):</label>
+        <div class="ticket-count">
+            <button onclick="changeTicket(-1)">-</button>
+            <span id="ticketCount">1</span>
+            <button onclick="changeTicket(1)">+</button>
+        </div>
+
+        <p>Total Fare: ₹<span id="totalFare">35</span></p>
+
+        <button class="pay-btn" onclick="payNow()">Pay Now</button>
+    </div>
+
+    <script>
+        let ticketCount = 1;
+        let farePerTicket = 35;
+
+        function nextStep() {
+            const origin = document.getElementById("origin").value;
+            const destination = document.getElementById("destination").value;
+            const phone = document.getElementById("phone").value;
+
+            if (origin && destination && phone) {
+                document.getElementById("originText").innerText = origin;
+                document.getElementById("destinationText").innerText = destination;
+                document.getElementById("phoneText").innerText = phone;
+
+                document.getElementById("step1").style.display = "none";
+                document.getElementById("step2").style.display = "block";
+            } else {
+                alert("Please fill in all details.");
+            }
+        }
+
+        document.getElementById("route").addEventListener("change", function() {
+            farePerTicket = parseInt(this.value);
+            updateFare();
+        });
+
+        function changeTicket(amount) {
+            if (ticketCount + amount > 0) {
+                ticketCount += amount;
+                document.getElementById("ticketCount").innerText = ticketCount;
+                updateFare();
+            }
+        }
+
+        function updateFare() {
+            document.getElementById("totalFare").innerText = ticketCount * farePerTicket;
+        }
+
+        function payNow() {
+            alert(`Your payment successful. Thank you!`);
+        }
+    </script>
+
+</body>
+</html>
